@@ -1,0 +1,521 @@
+# For-Amy
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fff5f0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1c1215" media="(prefers-color-scheme: dark)">
+  <title>For Amy 💌</title>
+  <style>
+    :root {
+      --bg: #fff5f0;
+      --card: #ffffff;
+      --ink: #2b1d1d;
+      --mut: #8a7070;
+      --acc: #e8455e;
+      --acc2: #ffd6dc;
+      --shadow: 0 12px 40px rgba(0,0,0,.1);
+      --radius: 22px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #1c1215;
+        --card: #2a1c20;
+        --ink: #fbeeee;
+        --mut: #b99;
+        --acc: #ff6b81;
+        --acc2: #4a2830;
+        --shadow: 0 12px 40px rgba(0,0,0,.4);
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #1c1215;
+      --card: #2a1c20;
+      --ink: #fbeeee;
+      --mut: #b99;
+      --acc: #ff6b81;
+      --acc2: #4a2830;
+      --shadow: 0 12px 40px rgba(0,0,0,.4);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Georgia, 'Times New Roman', serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px;
+      padding-top: max(20px, env(safe-area-inset-top));
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: cardIn .5s ease;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(16px) scale(.97); }
+      to   { opacity: 1; transform: none; }
+    }
+    h1 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+    }
+    p {
+      color: var(--mut);
+      line-height: 1.55;
+      margin: 0 0 20px;
+      font-size: 1.05rem;
+    }
+    .big {
+      font-size: 3.4rem;
+      line-height: 1;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .q {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 4px 0 6px;
+      line-height: 1.3;
+    }
+    .sub {
+      font-size: .9rem;
+      color: var(--mut);
+      margin-bottom: 18px;
+    }
+    /* Progress bar */
+    .bar {
+      height: 6px;
+      background: var(--acc2);
+      border-radius: 99px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .bar i {
+      display: block;
+      height: 100%;
+      background: var(--acc);
+      border-radius: 99px;
+      transition: width .45s cubic-bezier(.4,0,.2,1);
+    }
+    /* Buttons */
+    button, .btn {
+      font: inherit;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .opt, .go, .btn {
+      display: block;
+      width: 100%;
+      padding: 15px 18px;
+      margin: 8px 0;
+      border-radius: 16px;
+      font-size: 1.05rem;
+      transition: all .2s ease;
+    }
+    .opt {
+      background: transparent;
+      border: 2px solid var(--acc2);
+      color: var(--ink);
+    }
+    .opt:hover, .opt:focus-visible {
+      border-color: var(--acc);
+      background: color-mix(in srgb, var(--acc2) 60%, transparent);
+    }
+    .opt.sel {
+      border-color: var(--acc);
+      background: var(--acc2);
+      font-weight: 700;
+      transform: scale(1.02);
+    }
+    .go {
+      background: var(--acc);
+      color: #fff;
+      border: 2px solid var(--acc);
+      font-weight: 700;
+      margin-top: 14px;
+      box-shadow: 0 4px 16px color-mix(in srgb, var(--acc) 35%, transparent);
+    }
+    .go:hover:not(:disabled), .go:focus-visible:not(:disabled) {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+    .go:active:not(:disabled) { transform: translateY(1px); }
+    .go:disabled {
+      opacity: .4;
+      cursor: default;
+      box-shadow: none;
+    }
+    /* Inputs */
+    input[type="date"],
+    input[type="time"] {
+      width: 100%;
+      padding: 15px 18px;
+      border-radius: 14px;
+      border: 2px solid var(--acc2);
+      background: transparent;
+      color: var(--ink);
+      font-size: 1.1rem;
+      margin: 6px 0 4px;
+      font-family: inherit;
+      appearance: none;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--acc);
+    }
+    /* Summary */
+    .sum {
+      background: var(--acc2);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin: 18px 0;
+      text-align: left;
+      font-size: .98rem;
+      line-height: 1.65;
+      color: var(--ink);
+    }
+    .sum b { display: block; margin-bottom: 6px; }
+    .note {
+      text-align: left;
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    /* Links styled as buttons */
+    a.go, a.opt {
+      text-decoration: none;
+      text-align: center;
+    }
+    /* Letter overlay */
+    .ov {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px;
+      z-index: 50;
+      animation: fadeIn .35s ease;
+      backdrop-filter: blur(4px);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .let {
+      background: var(--card);
+      color: var(--ink);
+      border-radius: var(--radius);
+      max-width: 420px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 28px 24px;
+      text-align: left;
+      line-height: 1.7;
+      font-size: 1.05rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      animation: cardIn .4s ease;
+    }
+    .let h2 {
+      margin: 0 0 16px;
+      text-align: center;
+      font-size: 1.35rem;
+    }
+    .let p { margin-bottom: 1em; color: var(--ink); }
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      pointer-events: none;
+      z-index: 40;
+      font-size: 1.4rem;
+      will-change: transform, opacity;
+    }
+    /* Theme toggle */
+    .theme-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--acc2);
+      border: none;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform .2s;
+    }
+    .theme-btn:hover { transform: scale(1.1); }
+  </style>
+</head>
+<body>
+  <div class="card" id="app"></div>
+
+  <script>
+    const app = document.getElementById('app');
+    const esc = s => String(s).replace(/[&<>"']/g, c =>
+      ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    const KINDS = [
+      '🎬 Movie date',
+      '☕ Coffee date',
+      '🍽️ Dinner date',
+      '🎨 Art date',
+      '🎷 Jazz club date',
+      '🛍️ Shopping date',
+      '🧺 Picnic date'
+    ];
+
+    const A = { kinds: [], day: '', time: '' };
+
+    const bar = n =>
+      `<div class="bar" role="progressbar" aria-valuenow="${n}" aria-valuemin="0" aria-valuemax="4">
+         <i style="width:${(n/4)*100}%"></i>
+       </div>`;
+
+    // Theme
+    function initTheme() {
+      const saved = localStorage.getItem('amy-theme');
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
+    }
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute('data-theme');
+      const next = cur === 'dark' ? 'light' : (cur === 'light' ? 'dark' :
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'));
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('amy-theme', next);
+      render(); // re-render to update button icon
+    }
+    function themeBtn() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+        (!document.documentElement.getAttribute('data-theme') &&
+         window.matchMedia('(prefers-color-scheme: dark)').matches);
+      return `<button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme">${isDark ? '☀️' : '🌙'}</button>`;
+    }
+
+    // Steps
+    function intro() {
+      app.innerHTML = `
+        ${themeBtn()}
+        <span class="big">💌</span>
+        <h1>Hey Amy!</h1>
+        <p>I made you a little quiz.<br>There are no wrong answers, only good ones.<br>Ready?</p>
+        <button class="go" id="s">Start ✨</button>`;
+      document.getElementById('s').onclick = step1;
+    }
+
+    function step1() {
+      A.kinds = [];
+      app.innerHTML = `
+        ${themeBtn()}
+        ${bar(0)}
+        <div class="q">What kind of date would you go on with me?</div>
+        <div class="sub">Pick exactly 3</div>
+        ${KINDS.map((k,i) => `<button class="opt" data-i="${i}">${k}</button>`).join('')}
+        <button class="go" id="nx" disabled>Pick 3</button>`;
+
+      const nx = document.getElementById('nx');
+      const opts = [...app.querySelectorAll('.opt')];
+
+      const upd = () => {
+        nx.disabled = A.kinds.length !== 3;
+        nx.textContent = A.kinds.length === 3 ? 'Next →' : `Pick ${3 - A.kinds.length} more`;
+      };
+
+      opts.forEach(b => {
+        b.onclick = () => {
+          const k = KINDS[+b.dataset.i];
+          const idx = A.kinds.indexOf(k);
+          if (idx > -1) {
+            A.kinds.splice(idx, 1);
+            b.classList.remove('sel');
+          } else if (A.kinds.length < 3) {
+            A.kinds.push(k);
+            b.classList.add('sel');
+          }
+          upd();
+        };
+      });
+      nx.onclick = step2;
+      upd();
+    }
+
+    function step2() {
+      const today = new Date().toISOString().slice(0, 10);
+      app.innerHTML = `
+        ${themeBtn()}
+        ${bar(1)}
+        <div class="q">Which day works for you?</div>
+        <div class="sub">Choose a date</div>
+        <input type="date" id="d" min="${today}" value="${A.day || ''}">
+        <button class="go" id="nx" disabled>Next →</button>`;
+
+      const d = document.getElementById('d');
+      const nx = document.getElementById('nx');
+      const upd = () => {
+        A.day = d.value;
+        nx.disabled = !d.value;
+      };
+      d.oninput = upd;
+      nx.onclick = step3;
+      upd();
+    }
+
+    function step3() {
+      app.innerHTML = `
+        ${themeBtn()}
+        ${bar(2)}
+        <div class="q">What time suits you best?</div>
+        <div class="sub">Choose a time</div>
+        <input type="time" id="t" value="${A.time || ''}">
+        <button class="go" id="nx" disabled>Next →</button>`;
+
+      const t = document.getElementById('t');
+      const nx = document.getElementById('nx');
+      const upd = () => {
+        A.time = t.value;
+        nx.disabled = !t.value;
+      };
+      t.oninput = upd;
+      nx.onclick = step4;
+      upd();
+    }
+
+    function step4() {
+      app.innerHTML = `
+        ${themeBtn()}
+        ${bar(3)}
+        <span class="big">💘</span>
+        <div class="q">Final question:<br>Will you go out with me, Amy?</div>
+        <div class="sub">Choose carefully 😉</div>
+        <button class="go" id="y1">Yes 💖</button>
+        <button class="go" id="y2">Yes, absolutely 😍</button>`;
+      document.getElementById('y1').onclick =
+      document.getElementById('y2').onclick = done;
+    }
+
+    function fmtDay() {
+      return new Date(A.day + 'T12:00:00').toLocaleDateString(undefined, {
+        weekday: 'long', month: 'long', day: 'numeric'
+      });
+    }
+    function fmtTime() {
+      const [h, m] = A.time.split(':');
+      return new Date(2000, 0, 1, h, m).toLocaleTimeString(undefined, {
+        hour: 'numeric', minute: '2-digit'
+      });
+    }
+
+    function done() {
+      const msg = `Hi Marius, it's Amy. My answer is YES 💖\nMy 3 date picks: ${A.kinds.join(', ')}\nDay: ${fmtDay()}\nTime: ${fmtTime()}`;
+
+      app.innerHTML = `
+        ${themeBtn()}
+        <span class="big">🥹</span>
+        <h1>You said yes!</h1>
+        <div class="note">
+          Amy, I am so glad. Really. You just made my whole week.
+          I can't wait to spend this time with you, and I'll make it one you remember. 💖
+          <br><br>– Marius
+        </div>
+        <div class="sum">
+          <b>Your date</b>
+          ${A.kinds.map(k => esc(k)).join('<br>')}
+          <br>📅 ${esc(fmtDay())}
+          <br>🕐 ${esc(fmtTime())}
+        </div>
+        <a class="go" href="sms:+97660601217?&body=${encodeURIComponent(msg)}">
+          💬 Text my answer to Marius
+        </a>
+        <a class="opt" target="_blank" rel="noopener"
+           href="https://wa.me/97660601217?text=${encodeURIComponent(msg)}">
+          WhatsApp instead
+        </a>
+        <button class="opt" id="rd">💌 Read my note again</button>`;
+
+      document.getElementById('rd').onclick = showLetter;
+      setTimeout(showLetter, 2800);
+      launchConfetti();
+    }
+
+    // Letter
+    const LETTER = `You’re the most beautiful person I’ve ever met. And I’m not talking about your appearance but your whole existence. I love the way you smile and laugh. Just looking at you smiling makes me happy. I want to keep you happy all the time. You’re just cool, you can do anything.
+
+There is one important thing I want to remind you: you don’t have to beat yourself up all the time. You are good enough right now. Don’t rush, you have time, and you have me 😆
+
+There are times you feel close to giving up, and I know that cramped feeling of not knowing where to go. But you will find the way, because you’re smart. And when you feel down about yourself, I want you to talk to me.
+
+Well, this is the end of my long whimpering. Amy, you’re the best 😁`;
+
+    function showLetter() {
+      if (document.querySelector('.ov')) return;
+      const o = document.createElement('div');
+      o.className = 'ov';
+      o.innerHTML = `
+        <div class="let">
+          <h2>💌 For dear Amy</h2>
+          ${esc(LETTER).replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>').replace(/^/, '<p>').replace(/$/, '</p>')}
+          <button class="go" id="cl" style="margin-top:20px">Close 💖</button>
+        </div>`;
+      document.body.appendChild(o);
+      o.querySelector('#cl').onclick = () => o.remove();
+      o.onclick = e => { if (e.target === o) o.remove(); };
+    }
+
+    // Confetti
+    function launchConfetti() {
+      const emojis = ['💖', '✨', '🎉', '💕', '🌸', '⭐'];
+      for (let i = 0; i < 36; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        el.textContent = emojis[i % emojis.length];
+        el.style.cssText = `
+          left: ${Math.random() * 100}vw;
+          top: -40px;
+          font-size: ${18 + Math.random() * 22}px;
+          transition: transform ${2.2 + Math.random()}s linear, opacity ${2.2 + Math.random()}s linear;
+        `;
+        document.body.appendChild(el);
+        requestAnimationFrame(() => {
+          el.style.transform = `translateY(${window.innerHeight + 80}px) rotate(${Math.random() * 720 - 360}deg)`;
+          el.style.opacity = '0.15';
+        });
+        setTimeout(() => el.remove(), 3400);
+      }
+    }
+
+    // Boot
+    initTheme();
+    intro();
+
+    // Expose for theme button
+    window.toggleTheme = toggleTheme;
+  </script>
+</body>
+</html>
